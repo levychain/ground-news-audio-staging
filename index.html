@@ -3,22 +3,92 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Signal by Ground News</title>
-  <style>
-    body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 0; padding: 32px; background: #f6f7f8; color: #111; }
-    main { max-width: 680px; margin: 0 auto; }
-    h1 { font-size: 24px; line-height: 1.2; margin: 0 0 16px; }
-    p { font-size: 16px; line-height: 1.5; }
-    audio { width: 100%; margin: 20px 0; }
-    a { color: #0645ad; }
-  </style>
+  <title>Signal by Ground News, powered by NBN</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main>
-    <h1>Signal by Ground News</h1>
-    <p>Hormuz helicopter story sample. Six-spin stitched narrative render.</p>
-    <audio controls preload="metadata" src="signal-ground-news-sample.mp3?v=202606091908"></audio>
-    <p><a href="signal-ground-news-sample.mp3?v=202606091908">Open MP3 directly</a></p>
-  </main>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="kicker">Private concept demo</p>
+        <h1>Signal by Ground News</h1>
+      </div>
+      <span class="powered">Powered by NBN</span>
+    </header>
+
+    <main>
+      <section class="view active" id="feedView" aria-labelledby="feedTitle">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Today, June 9</p>
+            <h2 id="feedTitle">Your top stories, now listenable</h2>
+          </div>
+          <button class="icon-button" id="briefingShortcut" type="button" aria-label="Open briefing queue">
+            <span aria-hidden="true">Queue</span>
+          </button>
+        </div>
+        <div class="story-list" id="storyList"></div>
+      </section>
+
+      <section class="view" id="detailView" aria-labelledby="detailTitle">
+        <button class="text-button back-button" type="button" data-view="feedView">Back to feed</button>
+        <article class="detail-card">
+          <div class="detail-visual" id="detailVisual"></div>
+          <p class="kicker" id="detailSource"></p>
+          <h2 id="detailTitle"></h2>
+          <p class="detail-summary" id="detailSummary"></p>
+          <div class="signal-player">
+            <div>
+              <p class="kicker">Signal audio</p>
+              <strong id="detailAudioTitle"></strong>
+            </div>
+            <audio id="detailAudio" controls preload="metadata"></audio>
+          </div>
+          <div class="signal-notes" id="detailNotes"></div>
+        </article>
+      </section>
+
+      <section class="view" id="queueView" aria-labelledby="queueTitle">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Daily briefing</p>
+            <h2 id="queueTitle">Listen to my feed</h2>
+          </div>
+          <span class="duration-pill">8 min concept</span>
+        </div>
+        <div class="queue-card">
+          <div class="queue-timeline" id="queueTimeline"></div>
+          <button class="primary-button" type="button" id="playFirstReady">Play first ready story</button>
+        </div>
+      </section>
+
+      <section class="view" id="studioView" aria-labelledby="studioTitle">
+        <div class="section-head">
+          <div>
+            <p class="kicker">NBN generation dashboard</p>
+            <h2 id="studioTitle">From Ground URL to embeddable audio</h2>
+          </div>
+          <span class="status-dot">Sandbox</span>
+        </div>
+        <div class="pipeline" id="pipeline"></div>
+      </section>
+    </main>
+
+    <div class="mini-player" id="miniPlayer" aria-live="polite">
+      <div>
+        <p class="kicker">Now playing</p>
+        <strong id="miniTitle">Select a story</strong>
+      </div>
+      <button class="primary-button compact" type="button" id="miniOpen">Open</button>
+    </div>
+
+    <nav class="tabbar" aria-label="Demo navigation">
+      <button class="tab active" type="button" data-view="feedView">Feed</button>
+      <button class="tab" type="button" data-view="queueView">Queue</button>
+      <button class="tab" type="button" data-view="studioView">Studio</button>
+    </nav>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>
