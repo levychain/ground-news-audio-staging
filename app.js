@@ -4,15 +4,15 @@ const stories = [
     title: "Trump says Iran was responsible for downing American helicopter and that US must respond",
     source: "Ground News cluster, 118 articles",
     summary:
-      "Daniel Harper walks through Trump's Hormuz claim as a polished news segment with natural conversation texture.",
-    duration: "3:03",
+      "Daniel Harper walks through Trump's Hormuz claim in plain English without over-explaining the stakes.",
+    duration: "2:48",
     status: "Ready",
     visual: "visual-hormuz",
     label: "Hormuz / U.S.-Iran",
     audio: "assets/audio/hormuz-signal.mp3",
     notes: [
       ["Angle", "Geopolitical escalation"],
-      ["Script", "Active voice + natural disfluencies"],
+      ["Script", "Eighth-grade English, balanced"],
       ["Pronunciations", "Hormuz, Tehran, Iran, Apache"],
       ["TTS", "6 spins stitched"]
     ]
