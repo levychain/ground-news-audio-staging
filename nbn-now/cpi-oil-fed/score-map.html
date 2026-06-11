@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Now by NBN Score Map</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0f1012;
+      --panel: #17191d;
+      --panel-2: #202329;
+      --line: #30343d;
+      --text: #f4f2ec;
+      --muted: #b6b0a5;
+      --gold: #f0b35b;
+      --blue: #75a7ff;
+      --green: #7cd6a4;
+      --rose: #f089a0;
+      --violet: #b99cff;
+      --ink: #101010;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(240, 179, 91, 0.14), transparent 32rem),
+        linear-gradient(180deg, #121316, var(--bg));
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    header {
+      padding: 32px 18px 20px;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .kicker {
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(30px, 5vw, 58px);
+      line-height: 1.02;
+      letter-spacing: 0;
+    }
+
+    .subhead {
+      margin: 14px 0 0;
+      color: var(--muted);
+      max-width: 760px;
+      line-height: 1.55;
+      font-size: 16px;
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 18px 44px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: 16px 0 22px;
+    }
+
+    .metric, .rule-card, .segment, .cue-card {
+      background: rgba(23, 25, 29, 0.94);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.22);
+    }
+
+    .metric {
+      padding: 14px;
+      min-height: 94px;
+    }
+
+    .metric b {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px;
+      margin: 28px 0 12px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: 0;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .timeline {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(12, 13, 15, 0.7);
+      padding: 14px;
+    }
+
+    .track {
+      position: relative;
+      min-width: 1050px;
+      height: 360px;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px) 0 0 / 70px 100%,
+        linear-gradient(180deg, rgba(255,255,255,0.035), transparent);
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .time-label {
+      position: absolute;
+      top: 8px;
+      transform: translateX(-50%);
+      color: #8f948f;
+      font-size: 11px;
+    }
+
+    .lane-label {
+      position: absolute;
+      left: 10px;
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      font-weight: 800;
+    }
+
+    .block {
+      position: absolute;
+      border-radius: 8px;
+      padding: 8px 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.16);
+      min-width: 42px;
+    }
+
+    .block strong {
+      display: block;
+      font-size: 12px;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .block span {
+      display: block;
+      color: rgba(255,255,255,0.78);
+      font-size: 11px;
+      margin-top: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .dialogue { background: rgba(117, 167, 255, 0.24); }
+    .interview { background: rgba(124, 214, 164, 0.24); }
+    .music { background: rgba(240, 179, 91, 0.28); }
+    .takeaway { background: rgba(185, 156, 255, 0.26); }
+    .cta { background: rgba(240, 137, 160, 0.24); }
+
+    .segments {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .segment {
+      padding: 16px;
+    }
+
+    .segment h3 {
+      margin: 0 0 8px;
+      font-size: 17px;
+      letter-spacing: 0;
+    }
+
+    .meta {
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .segment p, .cue-card p, .rule-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.48;
+      font-size: 14px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 12px;
+    }
+
+    .pill {
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.05);
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 12px;
+      color: #ddd6cb;
+    }
+
+    .cue-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .cue-card {
+      padding: 15px;
+      min-height: 152px;
+    }
+
+    .cue-card h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+      letter-spacing: 0;
+    }
+
+    .rules {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 10px;
+    }
+
+    .rule-card {
+      padding: 13px;
+    }
+
+    .rule-card b {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+    }
+
+    .rule-card p {
+      font-size: 12px;
+      line-height: 1.42;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .key {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    @media (max-width: 860px) {
+      .grid, .segments, .cue-grid, .rules { grid-template-columns: 1fr; }
+      .section-title { display: block; }
+      .hint { margin-top: 6px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="kicker">Now by NBN / Sandbox Score Map</div>
+    <h1>CPI, Oil, and the Fed</h1>
+    <p class="subhead">A visual plan for interlacing music after the dialogue edit is locked. The goal is to make each cue earn its place: signal a new room, support an interview, sharpen an argument, or give the listener a reflective landing.</p>
+  </header>
+
+  <main>
+    <section class="grid" aria-label="Production principles">
+      <div class="metric"><b>Seven Story Rooms</b><span>Hook, lived pressure, oil mechanics, small business, Fed psychology, expert analysis, final reflection.</span></div>
+      <div class="metric"><b>Five Score Moments</b><span>Music enters around five times after the intro: Harris, oil/Fed shift, Maya, Viraj, close/CTA.</span></div>
+      <div class="metric"><b>One Series Theme</b><span>Intro and outro should use the recurring identity song. Other tracks support the story, not the brand.</span></div>
+      <div class="metric"><b>Final Pass Only</b><span>Render dialogue first, lock pacing, then score with a cue sheet in post-production.</span></div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <h2>Episode Timeline</h2>
+        <div class="hint">Approximate timestamps based on the current seventeen-minute sandbox cut.</div>
+      </div>
+      <div class="timeline">
+        <div class="track" id="timeline"></div>
+      </div>
+      <div class="legend">
+        <span class="key"><span class="swatch dialogue"></span>Daniel narration</span>
+        <span class="key"><span class="swatch interview"></span>Interview slice</span>
+        <span class="key"><span class="swatch music"></span>Music cue</span>
+        <span class="key"><span class="swatch takeaway"></span>Daniel takeaway</span>
+        <span class="key"><span class="swatch cta"></span>CTA / sign-off</span>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <h2>Segment Cards</h2>
+        <div class="hint">Each segment has a story job and a recommended music behavior.</div>
+      </div>
+      <div class="segments" id="segments"></div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <h2>Music Cue Strategy</h2>
+        <div class="hint">Track choices use the Smash library descriptions and should become cue-sheet JSON later.</div>
+      </div>
+      <div class="cue-grid" id="cueGrid"></div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <h2>Anti-Pitfall Rules</h2>
+        <div class="hint">These prevent the first pass from sounding overproduced or templated.</div>
+      </div>
+      <div class="rules">
+        <div class="rule-card"><b>No Wallpaper</b><p>Music cannot sit under everything. Dry narration is a feature when Daniel needs authority.</p></div>
+        <div class="rule-card"><b>Emotion Match</b><p>Human stories get warm beds. Analysis gets clean beds. Tension appears only when stakes rise.</p></div>
+        <div class="rule-card"><b>Voice First</b><p>Every bed must duck below speech and avoid rhythmic or melodic clutter under key lines.</p></div>
+        <div class="rule-card"><b>Vary the Shape</b><p>Use stingers, beds, swells, dry gaps, and reflection lifts so cues do not feel copied.</p></div>
+        <div class="rule-card"><b>One Primary Bed</b><p>Only one main music bed can run at a time, except for explicit timed crossfades.</p></div>
+        <div class="rule-card"><b>Cue Sheet Wins</b><p>Approve the visual map, then render from JSON. No hand-scoring by vibes.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const total = 1027;
+    const timeline = document.getElementById("timeline");
+
+    const blocks = [
+      { lane: "music", start: 0, end: 42, title: "Series Theme", note: "Full open, duck, date swell, fade", type: "music" },
+      { lane: "dialogue", start: 5, end: 126, title: "Hook + Identity", note: "Daniel frames the four-percent problem", type: "dialogue" },
+      { lane: "dialogue", start: 126, end: 200, title: "Segment One", note: "Lived inflation setup", type: "dialogue" },
+      { lane: "music", start: 190, end: 255, title: "Human Moment", note: "Rise before Harris, duck under interview", type: "music" },
+      { lane: "interview", start: 201, end: 255, title: "Ms. Harris", note: "Teacher and mom of three", type: "interview" },
+      { lane: "takeaway", start: 255, end: 315, title: "Daniel Takeaway", note: "Rent email to Fed reach", type: "takeaway" },
+      { lane: "music", start: 315, end: 360, title: "Data Cut", note: "Short bridge into oil mechanics", type: "music" },
+      { lane: "dialogue", start: 315, end: 480, title: "Oil + Fed Limits", note: "Energy shock, shipping, rates", type: "dialogue" },
+      { lane: "music", start: 470, end: 575, title: "Small Discoveries", note: "Warm bed before and under Maya", type: "music" },
+      { lane: "interview", start: 480, end: 575, title: "Maya Rodriguez", note: "Cafecito Harbor pressure", type: "interview" },
+      { lane: "takeaway", start: 575, end: 685, title: "Business Takeaway", note: "Costs become receipts", type: "takeaway" },
+      { lane: "music", start: 650, end: 725, title: "Rising Evidence", note: "Risk build, fades before Viraj", type: "music" },
+      { lane: "music", start: 725, end: 740, title: "Crossfade", note: "Rising Evidence hands to Paper Trail", type: "music" },
+      { lane: "dialogue", start: 685, end: 745, title: "Fed Psychology", note: "Temporary shock vs durable behavior", type: "dialogue" },
+      { lane: "music", start: 740, end: 875, title: "Paper Trail", note: "Primary expert bed under Viraj", type: "music" },
+      { lane: "interview", start: 745, end: 890, title: "Viraj Patel", note: "Expert frame: pass-through and policy trap", type: "interview" },
+      { lane: "takeaway", start: 890, end: 960, title: "Closing Argument", note: "All claims braided together", type: "takeaway" },
+      { lane: "music", start: 948, end: 1027, title: "Final Reflection / Theme", note: "Reflective bed, CTA lift, outro carry", type: "music" },
+      { lane: "cta", start: 960, end: 1027, title: "Question + CTA", note: "Comment prompt, five stars, newsletter", type: "cta" }
+    ];
+
+    const laneTop = { music: 52, dialogue: 122, interview: 192, takeaway: 262, cta: 302 };
+    const laneNames = [
+      ["music", "Music"],
+      ["dialogue", "Daniel"],
+      ["interview", "Interview"],
+      ["takeaway", "Takeaway"],
+      ["cta", "CTA"]
+    ];
+
+    function pct(seconds) {
+      return (seconds / total) * 100;
+    }
+
+    function mmss(seconds) {
+      const m = Math.floor(seconds / 60);
+      const s = String(Math.round(seconds % 60)).padStart(2, "0");
+      return `${m}:${s}`;
+    }
+
+    for (let t = 0; t <= total; t += 120) {
+      const label = document.createElement("div");
+      label.className = "time-label";
+      label.style.left = `${pct(t)}%`;
+      label.textContent = mmss(t);
+      timeline.appendChild(label);
+    }
+
+    laneNames.forEach(([key, label]) => {
+      const lane = document.createElement("div");
+      lane.className = "lane-label";
+      lane.style.top = `${laneTop[key] - 22}px`;
+      lane.textContent = label;
+      timeline.appendChild(lane);
+    });
+
+    blocks.forEach(block => {
+      const el = document.createElement("div");
+      el.className = `block ${block.type}`;
+      el.style.left = `${pct(block.start)}%`;
+      el.style.top = `${laneTop[block.lane]}px`;
+      el.style.width = `${Math.max(pct(block.end - block.start), 4)}%`;
+      el.innerHTML = `<strong>${block.title}</strong><span>${mmss(block.start)}-${mmss(block.end)} · ${block.note}</span>`;
+      timeline.appendChild(el);
+    });
+
+    const segments = [
+      {
+        time: "0:00-2:06",
+        title: "Cold Open, Identity, Date",
+        job: "Establish the four-percent inflation problem and the show identity before the date lands.",
+        music: ["Series theme", "Full open", "Duck under Daniel", "Swell after date"]
+      },
+      {
+        time: "2:06-4:15",
+        title: "Segment One: Lived Pressure",
+        job: "Move from national CPI to household pressure with Ms. Harris as the first proof point.",
+        music: ["Human Moment", "Lead-in before Harris", "Ducked interview bed", "Fade after Daniel takeaway"]
+      },
+      {
+        time: "4:15-8:00",
+        title: "Segment Two: Oil Changes the Math",
+        job: "Explain how energy pressure moves through shipping, airfare, and Fed limits.",
+        music: ["Data Cut", "Paper Trail", "Short cue only", "Mostly dry narration"]
+      },
+      {
+        time: "8:00-9:35",
+        title: "Segment Three: Small Business Reality",
+        job: "Let Maya turn inflation into an operational decision at Cafecito Harbor.",
+        music: ["Small Discoveries", "Warm lead-in", "Ducked interview bed", "Fade after receipt/menu insight"]
+      },
+      {
+        time: "9:35-12:25",
+        title: "Segment Four: Psychology and Risk",
+        job: "Show how expectations can make a temporary shock harder to contain.",
+        music: ["Hidden Layers", "Rising Evidence", "Low bed", "Crossfade out by 12:05"]
+      },
+      {
+        time: "12:25-14:45",
+        title: "Segment Five: Viraj Explains the Trap",
+        job: "Use expert support to explain energy pass-through, wages, business pricing, and the Fed path.",
+        music: ["Paper Trail", "12:05-12:20 crossfade", "Ducked under Viraj", "Fade by 14:35"]
+      },
+      {
+        time: "14:45-17:07",
+        title: "Close, Question, CTA, Outro",
+        job: "Tie all claims back to inflation above four percent, ask the listener a question, then exit with the brand.",
+        music: ["Final Reflection", "Closing Statement", "Series theme reprise", "Outro carry"]
+      }
+    ];
+
+    const segmentsRoot = document.getElementById("segments");
+    segments.forEach(segment => {
+      const el = document.createElement("article");
+      el.className = "segment";
+      el.innerHTML = `
+        <div class="meta">${segment.time}</div>
+        <h3>${segment.title}</h3>
+        <p>${segment.job}</p>
+        <div class="pill-row">${segment.music.map(item => `<span class="pill">${item}</span>`).join("")}</div>
+      `;
+      segmentsRoot.appendChild(el);
+    });
+
+    const cues = [
+      ["Series Theme", "Opening Signal or The Big Question", "Use only for the show identity: intro, date lift, final outro reprise. This keeps NBN recognizable."],
+      ["Human Proof", "Human Moment", "Use under Ms. Harris because the emotional job is practical household pressure, not suspense."],
+      ["Analysis Bridge", "Data Cut into Paper Trail", "Use a short editorial cue to move into oil/Fed mechanics, then keep narration mostly dry."],
+      ["Business Proof", "Small Discoveries", "Use under Maya because her segment needs warmth, motion, and small operational choices."],
+      ["Risk Build", "Hidden Layers or Rising Evidence", "Use only when expectations and Fed risk start compounding; keep it low and restrained."],
+      ["Expert Proof", "Paper Trail", "Use under Viraj because his section is structured analysis and source-driven explanation."],
+      ["Final Reflection", "Final Reflection or Closing Statement", "Use under the final question and CTA, then let it breathe after the sign-off."]
+    ];
+
+    const cueGrid = document.getElementById("cueGrid");
+    cues.forEach(([title, track, why]) => {
+      const el = document.createElement("article");
+      el.className = "cue-card";
+      el.innerHTML = `<div class="meta">${track}</div><h3>${title}</h3><p>${why}</p>`;
+      cueGrid.appendChild(el);
+    });
+  </script>
+</body>
+</html>
